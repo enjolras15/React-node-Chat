@@ -1,6 +1,5 @@
 # プロジェクトのルートディレクトリで、以下のコマンドを実行して必要なパッケージをインストールします。
-npm install socket.io-client
-npm install react-scripts
+npm install socket.io-client react-scripts
 
 # Getting Started with Create React App
 
