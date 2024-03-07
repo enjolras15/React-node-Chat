@@ -6,7 +6,8 @@ const server = require("http").createServer(app);
 const cors = require("cors");
 app.use(cors());
 
-
+let user = 0;
+let history = [];
 
 const { Server } = require("socket.io");
 const io = new Server(server, {
@@ -16,24 +17,30 @@ const io = new Server(server, {
     },
 });
 
-
 io.on("connection", (socket) => {
 
-    socket.user = 0;
-
     socket.on('login', () => {
+        history.push({ msg: "ユーザー"+user+"が入室しました。", sender: "" });
+        const jsonHistory = JSON.stringify(history);
 
-        io.emit("id", socket.user);
-        socket.user++;
+        io.emit("id", user);
+        io.emit("history", jsonHistory)
+    });
 
-    })
+    socket.on('regist', () => {
+
+        user++;
+
+    });
 
     socket.on('chat',  (msg, user)=> {
-        console.log(msg+""+user);
+        console.log(msg + "" + user);
+        history.push({msg:msg,sender:user});
         io.emit('chat', msg,user);
     });
 
     socket.on("disconnect", () => { 
+
         console.log("user disconnected");
     });
 });
